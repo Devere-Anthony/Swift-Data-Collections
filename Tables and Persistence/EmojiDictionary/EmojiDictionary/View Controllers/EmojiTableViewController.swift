@@ -57,7 +57,49 @@ class EmojiTableViewController: UITableViewController {
         
         // programmatically set the margins to be readable
         myTableView.cellLayoutMarginsFollowReadableWidth = true
+        
+        // programmatically add an edit button that will allow the user to edit the table
+        navigationItem.leftBarButtonItem = editButtonItem
     }
+    
+//    @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
+//        /* enable editing of the table view */
+//        
+//        // get the current editing state of the table view, it will be false
+//        // before the next line is called initially, and then true after the
+//        // next line, then so on
+//        let tableViewEditingMode = myTableView.isEditing
+//        print("Editing state before calling setEditing: \(tableViewEditingMode)")
+//        
+//        // put the table into editing mode (toggle editing mode of the table view on and off
+//        myTableView.setEditing(!tableViewEditingMode, animated: true)
+//        print("Editing state after calling setEditing: \(tableViewEditingMode)")
+//    }
+
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+        /* move the data from one row to another row, I suppose this implicitly moves
+         * whatever data is in that row as well?...
+         */
+        
+        // get the row location of the data to be moved
+        let movedEmoji = emojis.remove(at: fromIndexPath.row)
+        
+        // move that data to the new location
+        emojis.insert(movedEmoji, at: to.row)
+    }
+    
+//    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//        /* remove the delete editing control */
+//        return .none
+//    }
+//    
+    override func viewWillAppear(_ animated: Bool) {
+        /* reload the data source each time a user returns to the table */
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
+    
 
     // MARK: - Table view data source
 
@@ -93,8 +135,21 @@ class EmojiTableViewController: UITableViewController {
         content.text = "\(emoji.symbol) - \(emoji.name)"   // make edits to its properties
         content.secondaryText = emoji.description
         cell.contentConfiguration = content                // change the cell's config to the updated one
+        
+        // allow for reordering button to move cells around, this property must be set
+        cell.showsReorderControl = true
+        
         return cell
     }
+    
+    // MARK: - table view delegate
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        /* respond to the user tapping a given row, will print the emoji and index to the console */
+        let emoji = emojis[indexPath.row]   // only need to print the row since we only have one section
+        print("\(emoji) is located at index \(indexPath)")
+    }
+    
+    
 
     /*
     // Override to support conditional editing of the table view.

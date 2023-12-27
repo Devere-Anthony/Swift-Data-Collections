@@ -48,7 +48,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Emoji Dictionary" id="o5O-K8-iEl"/>
                     <connections>
-                        <outlet property="myTableView" destination="1FO-9S-LoM" id="djQ-BM-Z7n"/>
+                        <outlet property="myTableView" destination="1FO-9S-LoM" id="kd7-VV-O8a"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CTd-r8-3Sn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
