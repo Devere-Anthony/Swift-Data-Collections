@@ -59,26 +59,25 @@ class EmojiTableViewController: UITableViewController {
         myTableView.cellLayoutMarginsFollowReadableWidth = true
         
         // programmatically add an edit button that will allow the user to edit the table
-        navigationItem.leftBarButtonItem = editButtonItem
+        //navigationItem.leftBarButtonItem = editButtonItem
     }
     
-//    @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
-//        /* enable editing of the table view */
-//        
-//        // get the current editing state of the table view, it will be false
-//        // before the next line is called initially, and then true after the
-//        // next line, then so on
-//        let tableViewEditingMode = myTableView.isEditing
-//        print("Editing state before calling setEditing: \(tableViewEditingMode)")
-//        
-//        // put the table into editing mode (toggle editing mode of the table view on and off
-//        myTableView.setEditing(!tableViewEditingMode, animated: true)
-//        print("Editing state after calling setEditing: \(tableViewEditingMode)")
-//    }
+    @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
+        /* enable editing of the table view */
+        
+        // get the current editing state of the table view, it will be false
+        // before the next line is called initially, and then true after the
+        // next line, then so on
+        let tableViewEditingMode = myTableView.isEditing
+        
+        // put the table into editing mode (toggle editing mode of the table view on and off
+        myTableView.setEditing(!tableViewEditingMode, animated: true)
+    }
 
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         /* move the data from one row to another row, I suppose this implicitly moves
          * whatever data is in that row as well?...
+         * NOTE: It looks like implementing this will automatically add the reorder element to the table
          */
         
         // get the row location of the data to be moved
@@ -88,19 +87,17 @@ class EmojiTableViewController: UITableViewController {
         emojis.insert(movedEmoji, at: to.row)
     }
     
-//    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-//        /* remove the delete editing control */
-//        return .none
-//    }
-//    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        /* determine the editing style of the cells */
+        return .delete
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         /* reload the data source each time a user returns to the table */
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
     
-    
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -119,38 +116,51 @@ class EmojiTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // 1. ask the table view to dequeue a cell which will return a UITableViewCell instance of the
-        // same style that is registered in the Interface Builder - "EmojiCell" identifier
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath)
+        // MARK: - update cells with the table view controller
+//        // 1. ask the table view to dequeue a cell which will return a UITableViewCell instance of the
+//        // same style that is registered in the Interface Builder - "EmojiCell" identifier
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath)
+//        
+//        // 2. get model object
+//        let emoji = emojis[indexPath.row]
+//        
+//        // 3. configure the cell to display the model object's data
+//        var content = cell.defaultContentConfiguration()   // get the cell's configuration type
+//        content.text = "\(emoji.symbol) - \(emoji.name)"   // make edits to its properties
+//        content.secondaryText = emoji.description
+//        cell.contentConfiguration = content                // change the cell's config to the updated one
+//        
+//        // allow for reordering button to move cells around, this property must be set
+//        cell.showsReorderControl = true
+//        
+//        return cell
         
-        // 2. get appropriate model object to display in the cell using the indexPath parameter to
-        // get the array index required to retrieve the correct Emoji; we only need the row since
-        // we only have one section, if we had more, then we'd need to index with the section and the
-        // row attributes of the indexPath
+        // MARK: - update the cells using the custom table view cell controller
+        // 1. Dequeue cell - return an instance of a UITableViewCell and force-downcast to EmojiTableViewCell
+        // to use the custom update method we implemented
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath) as! EmojiTableViewCell
+        
+        // 2. Fetch model object to display
         let emoji = emojis[indexPath.row]
         
-        // 3. configure the cell to display the model object's data - modify the cell's view
-        // to display the emoji information
-        var content = cell.defaultContentConfiguration()   // get the cell's configuration type
-        content.text = "\(emoji.symbol) - \(emoji.name)"   // make edits to its properties
-        content.secondaryText = emoji.description
-        cell.contentConfiguration = content                // change the cell's config to the updated one
+        // 3. Configure cell - allow for reordering of cells
+        cell.update(with: emoji)
+        cell.showsReorderControl = true    // redundant since the moving is already implemented above
         
-        // allow for reordering button to move cells around, this property must be set
-        cell.showsReorderControl = true
-        
+        // 4. Return configured cell
         return cell
     }
     
     // MARK: - table view delegate
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        /* respond to the user tapping a given row, will print the emoji and index to the console */
-        let emoji = emojis[indexPath.row]   // only need to print the row since we only have one section
-        print("\(emoji) is located at index \(indexPath)")
-    }
+    /* when adding the functionality for segue from the cell to the navigation controller, we're not interested
+     * in this guy anymore
+     */
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        /* respond to the user tapping a given row, will print the emoji and index to the console */
+//        let emoji = emojis[indexPath.row]   // only need to print the row since we only have one section
+//        print("\(emoji) is located at index \(indexPath)")
+//    }
     
-    
-
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -159,17 +169,18 @@ class EmojiTableViewController: UITableViewController {
     }
     */
 
-    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            emojis.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
+        }
+/*        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
+*/
     }
-    */
 
     /*
     // Override to support rearranging the table view.
