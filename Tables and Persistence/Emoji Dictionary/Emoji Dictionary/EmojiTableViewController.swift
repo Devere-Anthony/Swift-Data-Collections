@@ -61,6 +61,21 @@ class EmojiTableViewController: UITableViewController {
         // programmatically add an edit button that will allow the user to edit the table
         //navigationItem.leftBarButtonItem = editButtonItem
     }
+  
+    
+    // define which table view is returned based on what was tapped by the user 
+    @IBSegueAction func addEditEmoji(_ coder: NSCoder, sender: Any?) -> AddEditEmojiTableViewController? {
+        // if the sender is the table view cell...
+        if let cell = sender as? UITableViewCell,
+           let indexPath = tableView.indexPath(for: cell) {
+            // ...then edit emoji at that given cell
+            let emojiToEdit = emojis[indexPath.row]
+            return AddEditEmojiTableViewController(coder: coder, emoji: emojiToEdit)
+        } else {
+            // the sender was the add button, so we add one
+            return AddEditEmojiTableViewController(coder: coder, emoji: nil)
+        }
+    }
     
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
         /* enable editing of the table view */

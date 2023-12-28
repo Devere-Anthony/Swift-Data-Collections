@@ -63,6 +63,7 @@
                                     <outlet property="descriptionLabel" destination="bRi-m3-kqC" id="FVd-Na-BRB"/>
                                     <outlet property="nameLabel" destination="Fgj-Ln-Tn8" id="3BX-h6-mtK"/>
                                     <outlet property="symbolLabel" destination="fwr-Nl-Cj2" id="3PT-gn-WSQ"/>
+                                    <segue destination="zSd-NU-zVW" kind="presentation" id="zKL-YM-nOR"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -77,6 +78,11 @@
                                 <action selector="editButtonTapped:" destination="a56-FE-JUy" id="Udq-ah-azm"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="zXL-fQ-4jH">
+                            <connections>
+                                <segue destination="zSd-NU-zVW" kind="presentation" id="GJC-1Z-PpT"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="myTableView" destination="xv3-Xy-Oct" id="ONw-pV-N6y"/>
@@ -85,6 +91,51 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DWE-R2-Tvk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="814" y="-260"/>
+        </scene>
+        <!--Root View Controller-->
+        <scene sceneID="4ug-zp-6pK">
+            <objects>
+                <tableViewController id="VPz-oO-wwX" customClass="AddEditEmojiTableViewController" customModule="Emoji_Dictionary" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="FpF-J9-ybZ">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="NtB-7E-eK4">
+                                <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NtB-7E-eK4" id="Bfj-S6-cTn">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="VPz-oO-wwX" id="JJD-Up-IcM"/>
+                            <outlet property="delegate" destination="VPz-oO-wwX" id="8aF-Hc-Bx1"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="wmC-ke-OTi"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DdZ-d9-8wk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2604" y="-261"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Wei-V6-3RA">
+            <objects>
+                <navigationController id="zSd-NU-zVW" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="grp-UG-Ge3">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="VPz-oO-wwX" kind="relationship" relationship="rootViewController" destinationCreationSelector="addEditEmoji:sender:" id="Lpk-aQ-emN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J0W-4x-3iW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1697" y="-261"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3Cp-Yj-91B">
@@ -103,6 +154,9 @@
             <point key="canvasLocation" x="-90" y="-260"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="GJC-1Z-PpT"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
