@@ -56,7 +56,7 @@ class EmojiTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         // programmatically set the margins to be readable
-        myTableView.cellLayoutMarginsFollowReadableWidth = true
+        //myTableView.cellLayoutMarginsFollowReadableWidth = true
         
         // programmatically add an edit button that will allow the user to edit the table
         //navigationItem.leftBarButtonItem = editButtonItem
