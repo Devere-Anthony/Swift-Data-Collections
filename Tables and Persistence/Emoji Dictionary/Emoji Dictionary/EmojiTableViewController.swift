@@ -48,32 +48,34 @@ class EmojiTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        // programmatically set the margins to be readable
-        //myTableView.cellLayoutMarginsFollowReadableWidth = true
-        
-        // programmatically add an edit button that will allow the user to edit the table
-        //navigationItem.leftBarButtonItem = editButtonItem
     }
   
     
-    // define which table view is returned based on what was tapped by the user 
+    // define which table view is returned based on what was tapped by the user
     @IBSegueAction func addEditEmoji(_ coder: NSCoder, sender: Any?) -> AddEditEmojiTableViewController? {
         // if the sender is the table view cell...
         if let cell = sender as? UITableViewCell,
            let indexPath = tableView.indexPath(for: cell) {
-            // ...then edit emoji at that given cell
             let emojiToEdit = emojis[indexPath.row]
             return AddEditEmojiTableViewController(coder: coder, emoji: emojiToEdit)
         } else {
-            // the sender was the add button, so we add one
             return AddEditEmojiTableViewController(coder: coder, emoji: nil)
+        }
+    }
+    
+    @IBAction func unwindToEmojiTableView(segue: UIStoryboardSegue) {
+        guard segue.identifier == "saveUnwind",
+              let sourceViewController = segue.source           // source view controller is where the segue just came from
+                as? AddEditEmojiTableViewController,            // and set it's type to the AddEditEmojiTableViewController subclass
+              let emoji = sourceViewController.emoji else {return}     // get the current emoji object from the view where the source came from
+        
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            emojis[selectedIndexPath.row] = emoji
+            tableView.reloadRows(at: [selectedIndexPath], with: .none)
+        } else {                                                            // if nil, then we're creating a new emoji
+            let newIndexPath = IndexPath(row: emojis.count, section: 0)     // create an index path that references a row within a given section,
+            emojis.append(emoji)                                            // basically add another row in the default section
+            tableView.insertRows(at: [newIndexPath], with: .automatic)      // insert a cell at the computed index path with automatic animation
         }
     }
     
@@ -131,25 +133,6 @@ class EmojiTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // MARK: - update cells with the table view controller
-//        // 1. ask the table view to dequeue a cell which will return a UITableViewCell instance of the
-//        // same style that is registered in the Interface Builder - "EmojiCell" identifier
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath)
-//        
-//        // 2. get model object
-//        let emoji = emojis[indexPath.row]
-//        
-//        // 3. configure the cell to display the model object's data
-//        var content = cell.defaultContentConfiguration()   // get the cell's configuration type
-//        content.text = "\(emoji.symbol) - \(emoji.name)"   // make edits to its properties
-//        content.secondaryText = emoji.description
-//        cell.contentConfiguration = content                // change the cell's config to the updated one
-//        
-//        // allow for reordering button to move cells around, this property must be set
-//        cell.showsReorderControl = true
-//        
-//        return cell
-        
         // MARK: - update the cells using the custom table view cell controller
         // 1. Dequeue cell - return an instance of a UITableViewCell and force-downcast to EmojiTableViewCell
         // to use the custom update method we implemented
@@ -166,24 +149,6 @@ class EmojiTableViewController: UITableViewController {
         return cell
     }
     
-    // MARK: - table view delegate
-    /* when adding the functionality for segue from the cell to the navigation controller, we're not interested
-     * in this guy anymore
-     */
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        /* respond to the user tapping a given row, will print the emoji and index to the console */
-//        let emoji = emojis[indexPath.row]   // only need to print the row since we only have one section
-//        print("\(emoji) is located at index \(indexPath)")
-//    }
-    
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -196,30 +161,4 @@ class EmojiTableViewController: UITableViewController {
         }    
 */
     }
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
