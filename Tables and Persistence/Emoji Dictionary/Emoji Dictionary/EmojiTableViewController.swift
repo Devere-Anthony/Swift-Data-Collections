@@ -48,6 +48,11 @@ class EmojiTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // calculate cell heigh based on content w/average cell l
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44.0
+        
     }
   
     
@@ -82,9 +87,6 @@ class EmojiTableViewController: UITableViewController {
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
         /* enable editing of the table view */
         
-        // get the current editing state of the table view, it will be false
-        // before the next line is called initially, and then true after the
-        // next line, then so on
         let tableViewEditingMode = myTableView.isEditing
         
         // put the table into editing mode (toggle editing mode of the table view on and off
