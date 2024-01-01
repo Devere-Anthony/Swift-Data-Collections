@@ -6,27 +6,35 @@
 import UIKit
 
 class EmojiTableViewCell: UITableViewCell {
-    
-    // The outlets we want to visually update
+
+//==============================================================================
+// MARK: Outlets
+//==============================================================================
     @IBOutlet var descriptionLabel: UILabel!
     @IBOutlet var symbolLabel: UILabel!
     @IBOutlet var nameLabel: UILabel!
     
+//==============================================================================
+// MARK: View Controller Methods
+//==============================================================================
     override func awakeFromNib() {
+        /* Built-in initialization code. */
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
+        /* Configure the view for the cell selected state. */
     }
     
     func update(with emoji: Emoji) {
-        /* take an Emoji instance and use it to update the cell's labels appropriately,
-         * this moves the visual cell updating code from the table view controller into
+        /* Take an Emoji instance and use it to update the cell's labels appropriately.
+         * This moves the visual cell updating code from the table view controller into
          * this table cell view controller and avoids all of the weirdness that goes
-         * along with it 
+         * along with it.
+         *
+         * This method is actually invoked in the EmojiTableViewController where the Emoji
+         * argument is pass from since this view controller doesn't contain an Emoji instance.
          */
         symbolLabel.text = emoji.symbol
         descriptionLabel.text = emoji.description

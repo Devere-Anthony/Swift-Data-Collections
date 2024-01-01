@@ -9,26 +9,40 @@ import UIKit
 
 class AddEditEmojiTableViewController: UITableViewController {
     
+//==============================================================================
+// MARK: Properties
+//==============================================================================
     var emoji: Emoji?
+    
+//==============================================================================
+// MARK: Outlets
+//==============================================================================
     @IBOutlet var symbolTextField: UITextField!
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var descriptionTextField: UITextField!
     @IBOutlet var usageTextField: UITextField!
     @IBOutlet var saveButton: UIBarButtonItem!
     
+//==============================================================================
+// MARK: View Controller Methods
+//==============================================================================
     init?(coder: NSCoder, emoji: Emoji?) {
+        /* Custom initializer */
         self.emoji = emoji
         super.init(coder: coder)
     }
     
     required init?(coder: NSCoder) {
+        /* Required initializer */
         fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let emoji = emoji {    // Edit mode - populate the textfields w/existing data
+        // Change the title of the view based on if the user is in the
+        // editing mode or if the user is in adding mode.
+        if let emoji = emoji {
             symbolTextField.text = emoji.symbol
             nameTextField.text = emoji.name
             descriptionTextField.text = emoji.description
@@ -38,32 +52,33 @@ class AddEditEmojiTableViewController: UITableViewController {
             title = "Add Emoji"
         }
         
-        // check save button state upon loading view
+        // Check save button state upon loading view.
         updateSaveButtonState()
     }
     
-    // make sure each input field is non-empty before allowing save
     func updateSaveButtonState() {
-        // get current text information
+        /* Check to make sure the user entered data into all the text fields
+         * before enabling the Save button.
+         */
         let nameText = nameTextField.text ?? ""
         let descriptionText = descriptionTextField.text ?? ""
         let usageText = usageTextField.text ?? ""
         
-        // set save button state, will return false is any of the
-        // above constants are empty
+        // Set save button state. This will return false is any of the
+        // above constants are empty.
         saveButton.isEnabled = containsSingleEmoji(symbolTextField) &&
         !nameText.isEmpty && !descriptionText.isEmpty &&
         !usageText.isEmpty
     }
     
-    // update save button state continuously after the inital view load,
-    // called each time a button in the text field is pressed
     @IBAction func textEditingChanged(_ sender: UITextField) {
+        /* Check the state of the Save button each time a button in the text field
+         * is pressed. */
         updateSaveButtonState()
     }
     
-    // input validation - this needs practice/experience
     func containsSingleEmoji(_ textField: UITextField) -> Bool {
+        /* Emoji text fild input validation. */
         guard let text = textField.text, text.count == 1 else {
             return false
         }
@@ -75,8 +90,10 @@ class AddEditEmojiTableViewController: UITableViewController {
         return isEmojiPresentation || isCombinedIntoEmoji
     }
     
-    //save user input and create a new Emoji is the save segue is used
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        /* Save the user's input if the Save button is pressed and then take that input
+         * to create a new Emoji object. This Emoji object will be passed to the view
+         * the segue is returning to. */
         guard segue.identifier == "saveUnwind" else {return}
         
         let symbol = symbolTextField.text!
