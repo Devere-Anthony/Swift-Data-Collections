@@ -3,4 +3,69 @@
    uuid = "42583092-DEB1-449C-B08B-ED8E5311ACC3"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CA03A629-13E1-4C15-A3BF-76BF263BA16B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Hotel Manzana/View Controllers/AddRegistrationTableViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "AddRegistrationTableViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "CA03A629-13E1-4C15-A3BF-76BF263BA16B - c973c862695ab98"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Hotel_Manzana.AddRegistrationTableViewController.datePickerChanged(__C.UIDatePicker) -&gt; ()"
+                  moduleName = "Hotel Manzana"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/devere/Swift-Data/Tables%20and%20Persistence/Hotel%20Manzana/Hotel%20Manzana/View%20Controllers/AddRegistrationTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "203"
+                  endingLineNumber = "203"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "CA03A629-13E1-4C15-A3BF-76BF263BA16B - c973c862695ab5a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Hotel_Manzana.AddRegistrationTableViewController.datePickerChanged(__C.UIDatePicker) -&gt; ()"
+                  moduleName = "Hotel Manzana"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/devere/Swift-Data/Tables%20and%20Persistence/Hotel%20Manzana/Hotel%20Manzana/View%20Controllers/AddRegistrationTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "205"
+                  endingLineNumber = "205"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "CA03A629-13E1-4C15-A3BF-76BF263BA16B - c973c862695b6ce"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Hotel_Manzana.AddRegistrationTableViewController.datePickerChanged(__C.UIDatePicker) -&gt; ()"
+                  moduleName = "Hotel Manzana"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/devere/Swift-Data/Tables%20and%20Persistence/Hotel%20Manzana/Hotel%20Manzana/View%20Controllers/AddRegistrationTableViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "225"
+                  endingLineNumber = "225"
+                  offsetFromSymbolStart = "32">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

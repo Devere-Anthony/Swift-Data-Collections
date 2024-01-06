@@ -7,10 +7,11 @@
 
 import UIKit
 
-class AddRegistrationTableViewController: UITableViewController {
+class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeTableViewControllerDelegate
+{
     
 //==============================================================================
-// MARK: Class Properties
+// MARK: View Controller Properties
 //==============================================================================
     // Store the index path  for the two date picker objects.
     let checkInDatePickerCellIndexPath = IndexPath(row: 1, section: 1)
@@ -34,6 +35,29 @@ class AddRegistrationTableViewController: UITableViewController {
     // Store the index path for check-in and check-out rows.
     let checkInDateLabelCellIndexPath = IndexPath(row: 0, section: 1)
     let checkOutDateLabelCellIndexPath = IndexPath(row: 2, section: 1)
+    
+    // Add a property to hold the selected room type.
+    var roomType: RoomType?
+    
+    // Add a computed property that will return a new Registration? object that we can
+    // use to save to our storage system and/or send to a web server for further processing.
+    var registration: Registration? {
+        // Make sure the roomType is actually set before attempting to create a new model object.
+        guard let roomType = roomType else {return nil}
+        
+        let firstName = firstNameTextField.text ?? ""
+        let lastName = lastNameTextField.text ?? ""
+        let email = emailTextField.text ?? ""
+        let checkInDate = checkInDatePicker.date
+        let checkOutDate = checkOutDatePicker.date
+        let numberOfAdults = Int(numberOfAdultsStepper.value)
+        let numberOfChildren = Int(numberOfChildrenStepper.value)
+        let hasWifi = wifiSwitch.isOn
+        
+        return Registration(firstName: firstName, lastName: lastName, emailAddress: email, checkInDate: checkInDate,
+                            checkOutData: checkOutDate, numberOfAdults: numberOfAdults, numberOfChildren: numberOfChildren,
+                            wifi: hasWifi, roomType: roomType)
+    }
    
 //==============================================================================
 // MARK: Interface Builder Outlets
@@ -45,7 +69,12 @@ class AddRegistrationTableViewController: UITableViewController {
     @IBOutlet var checkInDatePicker: UIDatePicker!
     @IBOutlet var checkOutDateLabel: UILabel!
     @IBOutlet var checkOutDatePicker: UIDatePicker!
-    
+    @IBOutlet var numberOfAdultsLabel: UILabel!
+    @IBOutlet var numberOfAdultsStepper: UIStepper!
+    @IBOutlet var numberOfChildrenLabel: UILabel!
+    @IBOutlet var numberOfChildrenStepper: UIStepper!
+    @IBOutlet var wifiSwitch: UISwitch!
+    @IBOutlet var roomTypeLabel: UILabel!
     
 //==============================================================================
 // MARK: View Controller Methods
@@ -62,6 +91,12 @@ class AddRegistrationTableViewController: UITableViewController {
         
         // Initialize the date labels upon start up.
         updateDateViews()
+        
+        // Set up the number of guests correctly
+        updateNumberOfGuests()
+        
+        // Initialize the room type label.
+        updateRoomType()
     }
     
     func updateDateViews() {
@@ -126,6 +161,36 @@ class AddRegistrationTableViewController: UITableViewController {
         tableView.endUpdates()
     }
     
+    func updateNumberOfGuests() {
+        /* Update the number of adult and/or child guests. Initially this value is called
+         * to synchronize the views, after it will be invoked each time one of the stepper
+         * UI elements is pressed. */
+        numberOfAdultsLabel.text = "\(Int(numberOfAdultsStepper.value))"
+        numberOfChildrenLabel.text = "\(Int(numberOfChildrenStepper.value))"
+    }
+    
+    func updateRoomType() {
+        /* Updates the room type label to match the user selection. */
+        
+        // Recall, roomType is an optional so we'll need to handle both cases.
+        if let roomType = roomType {
+            roomTypeLabel.text = roomType.name
+        } else {
+            roomTypeLabel.text = "Not Set"
+        }
+    }
+    
+    func selectRoomTypeTableViewController(_ controller: SelectRoomTypeTableViewController, didSelect roomType: RoomType) {
+        /* Required implementation for the selectRoomTypeTableViewController delegate. This
+         * implementation will update the room type label based on the user's selection that
+         * gets past to it from the SelectRommTypeTableViewController. */
+        
+        // Here we set the class properties room type to be that of the room type selected
+        // by the user from the selection table view. Then we call updateRoomType()
+        // which we unwrap the roomType and set it's text accordingly.
+        self.roomType = roomType
+        updateRoomType()
+    }
     
 //==============================================================================
 // MARK: Interface Builder Actions
@@ -137,6 +202,10 @@ class AddRegistrationTableViewController: UITableViewController {
         let email = emailTextField.text ?? ""
         let checkInDate = checkInDatePicker.date
         let checkOutDate = checkOutDatePicker.date
+        let numberOfAdults = Int(numberOfAdultsStepper.value)
+        let numberOfChildren = Int(numberOfChildrenStepper.value)
+        let hasWifi = wifiSwitch.isOn
+        let roomChoice = roomType?.name ?? "Not set"
         
         print("Done Tapped")
         print("first name: \(firstName)")
@@ -144,11 +213,41 @@ class AddRegistrationTableViewController: UITableViewController {
         print("email: \(email)")
         print("Check-in date: \(checkInDate)")
         print("Check-out date: \(checkOutDate)")
+        print("Adults: \(numberOfAdults)")
+        print("Children: \(numberOfChildren)")
+        print("Wi-fi: \(hasWifi)")
+        print("room type: \(roomChoice)")
     }
     
     @IBAction func datePickerChanged(_ sender: UIDatePicker) {
         /* Update the date labels and the minimum check-out date each time the
          * user updates the dates in the DatePickers. */
         updateDateViews()
+    }
+    
+    @IBAction func stepperValueChanged(_ sender: UIStepper) {
+        /* Invoke the updateNumberOfGuests() method each time a stepper value is changed. */
+        updateNumberOfGuests()
+    }
+    
+    @IBAction func wifiSwitchChanged(_ sender: UISwitch) {
+        /* TODO: Implement the logic for this later in the challenge section. */
+    }
+    
+    @IBSegueAction func selectRoomType(_ coder: NSCoder) -> SelectRoomTypeTableViewController? {
+        /* Set the delegate property and the roomType property of the selection view if a selection
+         * has already been made...?*/
+        
+        // Create a local variable that stores the selection table view controller that the
+        // segue transitions to.
+        let selectRoomTypeController = SelectRoomTypeTableViewController(coder: coder)
+        
+        // Set the delegate property of the selection table view and the room type property as well.
+        selectRoomTypeController?.delegate = self
+        selectRoomTypeController?.roomType = roomType
+        
+        // Return an instance of the selection table view controller with it's delegate and room type
+        // properties set.
+        return selectRoomTypeController
     }
 }
