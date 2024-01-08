@@ -55,8 +55,15 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         let hasWifi = wifiSwitch.isOn
         
         return Registration(firstName: firstName, lastName: lastName, emailAddress: email, checkInDate: checkInDate,
-                            checkOutData: checkOutDate, numberOfAdults: numberOfAdults, numberOfChildren: numberOfChildren,
+                            checkOutDate: checkOutDate, numberOfAdults: numberOfAdults, numberOfChildren: numberOfChildren,
                             wifi: hasWifi, roomType: roomType)
+     }
+    
+    // TODO: Pass the registration property to the RegistrationTableViewController
+    // This can be accomplished using a prepare method?...
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        /* Send a newly created Registration object to the Registrations table view. */
+        guard segue.identifier == "unwindToRegistrationTable" else {return}
     }
    
 //==============================================================================
@@ -195,30 +202,6 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
 //==============================================================================
 // MARK: Interface Builder Actions
 //==============================================================================
-    @IBAction func doneButtonTaped(_ sender: UIBarButtonItem) {
-        /* Save the user information and print user input data. */
-        let firstName = firstNameTextField.text ?? ""
-        let lastName = lastNameTextField.text ?? ""
-        let email = emailTextField.text ?? ""
-        let checkInDate = checkInDatePicker.date
-        let checkOutDate = checkOutDatePicker.date
-        let numberOfAdults = Int(numberOfAdultsStepper.value)
-        let numberOfChildren = Int(numberOfChildrenStepper.value)
-        let hasWifi = wifiSwitch.isOn
-        let roomChoice = roomType?.name ?? "Not set"
-        
-        print("Done Tapped")
-        print("first name: \(firstName)")
-        print("last name: \(lastName)")
-        print("email: \(email)")
-        print("Check-in date: \(checkInDate)")
-        print("Check-out date: \(checkOutDate)")
-        print("Adults: \(numberOfAdults)")
-        print("Children: \(numberOfChildren)")
-        print("Wi-fi: \(hasWifi)")
-        print("room type: \(roomChoice)")
-    }
-    
     @IBAction func datePickerChanged(_ sender: UIDatePicker) {
         /* Update the date labels and the minimum check-out date each time the
          * user updates the dates in the DatePickers. */
@@ -249,5 +232,10 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         // Return an instance of the selection table view controller with it's delegate and room type
         // properties set.
         return selectRoomTypeController
+    }
+    
+    @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
+        /* Allow the user to cancel adding a new registration. */
+        dismiss(animated: true, completion: nil)
     }
 }

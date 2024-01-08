@@ -17,6 +17,7 @@
 		CC4861DB2B462F76003152A3 /* AddRegistrationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4861DA2B462F76003152A3 /* AddRegistrationTableViewController.swift */; };
 		CC6B84692B473D45006133C9 /* SelectRoomTypeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6B84682B473D45006133C9 /* SelectRoomTypeTableViewController.swift */; };
 		CC6B846B2B49C76A006133C9 /* RegistrationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6B846A2B49C76A006133C9 /* RegistrationTableViewController.swift */; };
+		CC6B846D2B4C62DC006133C9 /* RegistrationDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6B846C2B4C62DC006133C9 /* RegistrationDetailsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		CC4861DA2B462F76003152A3 /* AddRegistrationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRegistrationTableViewController.swift; sourceTree = "<group>"; };
 		CC6B84682B473D45006133C9 /* SelectRoomTypeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoomTypeTableViewController.swift; sourceTree = "<group>"; };
 		CC6B846A2B49C76A006133C9 /* RegistrationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationTableViewController.swift; sourceTree = "<group>"; };
+		CC6B846C2B4C62DC006133C9 /* RegistrationDetailsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationDetailsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				CC6B846A2B49C76A006133C9 /* RegistrationTableViewController.swift */,
 				CC4861DA2B462F76003152A3 /* AddRegistrationTableViewController.swift */,
 				CC6B84682B473D45006133C9 /* SelectRoomTypeTableViewController.swift */,
+				CC6B846C2B4C62DC006133C9 /* RegistrationDetailsTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				CC4861D22B46253D003152A3 /* Registration.swift in Sources */,
 				CC4861C02B462452003152A3 /* SceneDelegate.swift in Sources */,
 				CC6B846B2B49C76A006133C9 /* RegistrationTableViewController.swift in Sources */,
+				CC6B846D2B4C62DC006133C9 /* RegistrationDetailsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

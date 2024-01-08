@@ -16,12 +16,6 @@ class RegistrationTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
 //==============================================================================
@@ -39,55 +33,53 @@ class RegistrationTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "registrationCell", for: indexPath)
+        let registration = registrations[indexPath.row]
         
-       // TODO: Finish configuring the registrations cells.
+        var content = cell.defaultContentConfiguration()
+        content.text = "\(registration.firstName) \(registration.lastName)"
+        content.secondaryText = "\(registration.checkInDate.formatted(date: .numeric, time: .omitted)) - \(registration.checkOutDate.formatted(date: .numeric, time: .omitted)): \(registration.roomType.name)"
+        
+        cell.contentConfiguration = content
         return cell
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        
+    @IBAction func unwindToRegistrationTable(segue: UIStoryboardSegue) {
+        /* Get the Registration object created in the AddRegistrationTableViewController
+         * and add it to the registrations array so that it can be presented in the
+         * registration table cells. */
+        
+        guard segue.identifier == "unwindToRegistrationTable",
+              let sourceViewController = segue.source as? AddRegistrationTableViewController,
+              let registration = sourceViewController.registration
+        else {return}
+        
+        registrations.append(registration)
+        
+        // Don't forget to reload the table data to see the changes.
+        tableView.reloadData()
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    @IBSegueAction func registrationDetails(_ coder: NSCoder, sender: Any?) -> RegistrationDetailsTableViewController? {
+        if let cell = sender as? UITableViewCell,
+           let indexPath = tableView.indexPath(for: cell) {
+            let registrationToSend = registrations[indexPath.row]
+            return RegistrationDetailsTableViewController(coder: coder, registration: registrationToSend)
+        } else {
+            return nil
+        }
     }
-    */
+ 
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    @IBSegueAction func registrationDetailView(_ coder: NSCoder, sender: Any?) -> RegistrationDetailsTableViewController? {
+        /* This method is called when the user taps an existing registration entry and wants to see
+         * more details about this registration. */
+        
+        // I need to get the registration the user tapped and then pass that to the initializer for the new view
+        if let cell = sender as? UITableViewCell,
+           let indexPath = tableView.indexPath(for: cell) {
+            let registration = registrations[indexPath.row]
+            return RegistrationDetailsTableViewController(coder: coder, registration: registration)
+        } else {return nil}
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}
+}    // end view controller

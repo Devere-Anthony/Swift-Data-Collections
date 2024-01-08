@@ -12,7 +12,7 @@ struct Registration {
     var lastName: String
     var emailAddress: String
     var checkInDate: Date
-    var checkOutData: Date
+    var checkOutDate: Date
     var numberOfAdults: Int
     var numberOfChildren: Int
     var wifi: Bool
