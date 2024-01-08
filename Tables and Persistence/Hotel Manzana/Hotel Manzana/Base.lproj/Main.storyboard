@@ -29,6 +29,9 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="textFieldUpdated:" destination="gGe-f5-cx3" eventType="editingChanged" id="VRP-3W-rkV"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -51,6 +54,9 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="textFieldUpdated:" destination="gGe-f5-cx3" eventType="editingChanged" id="fj2-r5-9bz"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -73,6 +79,9 @@
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="textFieldUpdated:" destination="gGe-f5-cx3" eventType="editingChanged" id="XLl-FJ-wqK"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -369,6 +378,7 @@
                         <outlet property="checkInDatePicker" destination="nb6-2W-RZ6" id="wdy-cn-9cC"/>
                         <outlet property="checkOutDateLabel" destination="qLa-EC-WtK" id="WsK-KU-ofI"/>
                         <outlet property="checkOutDatePicker" destination="SGW-np-1af" id="JAi-O4-W06"/>
+                        <outlet property="doneButton" destination="DVE-C4-Ehc" id="xmK-cl-ZnQ"/>
                         <outlet property="emailTextField" destination="TNC-II-QHw" id="QkE-bd-USZ"/>
                         <outlet property="firstNameTextField" destination="tj9-q8-EvT" id="37P-d6-B07"/>
                         <outlet property="lastNameTextField" destination="btf-it-6Ti" id="Bu4-ro-bvC"/>

@@ -59,8 +59,6 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
                             wifi: hasWifi, roomType: roomType)
      }
     
-    // TODO: Pass the registration property to the RegistrationTableViewController
-    // This can be accomplished using a prepare method?...
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         /* Send a newly created Registration object to the Registrations table view. */
         guard segue.identifier == "unwindToRegistrationTable" else {return}
@@ -82,6 +80,7 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
     @IBOutlet var numberOfChildrenStepper: UIStepper!
     @IBOutlet var wifiSwitch: UISwitch!
     @IBOutlet var roomTypeLabel: UILabel!
+    @IBOutlet var doneButton: UIBarButtonItem!
     
 //==============================================================================
 // MARK: View Controller Methods
@@ -104,6 +103,9 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         
         // Initialize the room type label.
         updateRoomType()
+        
+        // Initialize the Done button to be disabled
+        doneButton.isEnabled = false
     }
     
     func updateDateViews() {
@@ -118,6 +120,20 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
                                                                  time: .omitted)
         checkOutDateLabel.text = checkOutDatePicker.date.formatted(date: .abbreviated,
                                                                    time: .omitted)
+    }
+    
+    func updateDoneButton() {
+        /* Enable the Done button if the user inputs are valid.k */
+        
+        // Create local variables that store the Registration data.
+        let firstNameText = firstNameTextField.text ?? ""
+        let lastNameText = lastNameTextField.text ?? ""
+        let emailText = emailTextField.text ?? ""
+        let adultsNumber = numberOfAdultsStepper.value
+        let roomType = registration?.roomType
+        
+        // Test if the text fields are empty.
+        doneButton.isEnabled = !firstNameText.isEmpty && !lastNameText.isEmpty && !emailText.isEmpty && (adultsNumber >= 1) && (roomType != nil)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -197,6 +213,7 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         // which we unwrap the roomType and set it's text accordingly.
         self.roomType = roomType
         updateRoomType()
+        updateDoneButton()
     }
     
 //==============================================================================
@@ -211,6 +228,7 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
         /* Invoke the updateNumberOfGuests() method each time a stepper value is changed. */
         updateNumberOfGuests()
+        updateDoneButton()
     }
     
     @IBAction func wifiSwitchChanged(_ sender: UISwitch) {
@@ -237,5 +255,10 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
     @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
         /* Allow the user to cancel adding a new registration. */
         dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func textFieldUpdated(_ sender: UITextField) {
+        /* Check for valid input each time the user updates the text. */
+        updateDoneButton()
     }
 }

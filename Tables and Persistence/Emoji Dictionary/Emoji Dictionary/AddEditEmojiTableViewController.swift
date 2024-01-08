@@ -26,11 +26,7 @@ class AddEditEmojiTableViewController: UITableViewController {
 //==============================================================================
 // MARK: View Controller Methods
 //==============================================================================
-    init?(coder: NSCoder, emoji: Emoji?) {
-        /* Custom initializer */
-        self.emoji = emoji
-        super.init(coder: coder)
-    }
+ 
     
     required init?(coder: NSCoder) {
         /* Required initializer */
