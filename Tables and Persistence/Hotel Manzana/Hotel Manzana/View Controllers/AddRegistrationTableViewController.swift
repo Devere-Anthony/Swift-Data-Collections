@@ -63,10 +63,16 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         /* Send a newly created Registration object to the Registrations table view. */
         guard segue.identifier == "unwindToRegistrationTable" else {return}
     }
-   
+    
+    // Properties needed for charges
+    var roomTotal: Int!
+    var wifiTotal: Int!
+    
+    
 //==============================================================================
 // MARK: Interface Builder Outlets
 //==============================================================================
+    // User input
     @IBOutlet var firstNameTextField: UITextField!
     @IBOutlet var lastNameTextField: UITextField!
     @IBOutlet var emailTextField: UITextField!
@@ -81,6 +87,15 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
     @IBOutlet var wifiSwitch: UISwitch!
     @IBOutlet var roomTypeLabel: UILabel!
     @IBOutlet var doneButton: UIBarButtonItem!
+    
+    // Charges
+    @IBOutlet var numberOfNightsLabel: UILabel!
+    @IBOutlet var datesLabel: UILabel!
+    @IBOutlet var roomTotalLabel: UILabel!
+    @IBOutlet var roomNameAndPriceLabel: UILabel!
+    @IBOutlet var wifiTotalLabel: UILabel!
+    @IBOutlet var wifiChoiceLabel: UILabel!
+    @IBOutlet var totalLabel: UILabel!
     
 //==============================================================================
 // MARK: View Controller Methods
@@ -98,14 +113,26 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         // Initialize the date labels upon start up.
         updateDateViews()
         
-        // Set up the number of guests correctly
+        // Set up the number of guests correctly.
         updateNumberOfGuests()
         
         // Initialize the room type label.
         updateRoomType()
         
-        // Initialize the Done button to be disabled
+        // Initialize the Done button to be disabled.
         doneButton.isEnabled = false
+        
+        // Initialize the number of nights in the charges section.
+        updateNumberOfNightsCharges()
+        
+        // Initialize the wifi charges.
+        updateWifiCharges()
+        
+        // Initialize the labels in the charges section.
+        roomTotalLabel.text = "-"
+        roomNameAndPriceLabel.text = "-"
+        totalLabel.text = "-"
+        
     }
     
     func updateDateViews() {
@@ -123,7 +150,7 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
     }
     
     func updateDoneButton() {
-        /* Enable the Done button if the user inputs are valid.k */
+        /* Enable the Done button if the user inputs are valid. */
         
         // Create local variables that store the Registration data.
         let firstNameText = firstNameTextField.text ?? ""
@@ -198,8 +225,11 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         // Recall, roomType is an optional so we'll need to handle both cases.
         if let roomType = roomType {
             roomTypeLabel.text = roomType.name
+            updateRoomTypeCharges()
+            computeTotal()
         } else {
             roomTypeLabel.text = "Not Set"
+            computeTotal()
         }
     }
     
@@ -216,6 +246,70 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         updateDoneButton()
     }
     
+    func updateNumberOfNightsCharges() {
+        /* Dynamically update the information in the Number of Nights row
+         * in the charges section of the table. */
+        let checkInDate = checkInDatePicker.date
+        let checkOutDate = checkOutDatePicker.date
+        let diff = Calendar.current.dateComponents([.day], from: checkInDate, to: checkOutDate)
+        numberOfNightsLabel.text = "\(diff.day ?? 1)"
+        datesLabel.text = "\(checkInDate.formatted(date: .abbreviated, time: .omitted)) - \(checkOutDate.formatted(date: .abbreviated, time: .omitted))"
+        
+        // Update the room total, wifi total, and guest overall total for visit.
+        updateRoomTypeCharges()
+        updateWifiCharges()
+        computeTotal()
+    }
+    
+    func updateRoomTypeCharges() {
+        /* Dynamically update the Room Type row in the charges section of the table. */
+        
+        // Display the total room price (room price * number of nights.
+        let checkInDate = checkInDatePicker.date
+        let checkOutDate = checkOutDatePicker.date
+        let diff = Calendar.current.dateComponents([.day], from: checkInDate, to: checkOutDate)
+        
+        // Unwrap days and price to get the total room price.
+        if let days = diff.day,
+           let price = roomType?.price {
+            roomTotalLabel.text = "$\(days * price)"
+            roomTotal = days * price
+        }
+        
+        // Change the subtitle as well
+        if let roomName = roomType?.name,
+           let roomPrice = roomType?.price {
+            roomNameAndPriceLabel.text = "\(roomName) @ $\(roomPrice)/night"
+        }
+    }
+    
+    func updateWifiCharges() {
+        /* Dynamically update the Wi-Fi related chages in the charges section of the table. */
+        
+        let checkInDate = checkInDatePicker.date
+        let checkOutDate = checkOutDatePicker.date
+        let diff = Calendar.current.dateComponents([.day], from: checkInDate, to: checkOutDate)
+        
+        // test if the wifi switch is enabled?
+        if wifiSwitch.isOn {
+            if let days = diff.day {
+                let price = 10
+                wifiTotalLabel.text = "$\(days * price)"
+                wifiChoiceLabel.text = "Yes"
+                wifiTotal = (days * price)
+            }
+        } else {
+            wifiTotalLabel.text = "-"
+            wifiChoiceLabel.text = "No"
+        }
+    }
+    
+    func computeTotal() {
+        /* Compute the total cost for the guest's stay based on their input choices. */
+        if let roomTotal = roomTotal {
+            totalLabel.text = "$\(roomTotal + wifiTotal)"
+        }
+    }
 //==============================================================================
 // MARK: Interface Builder Actions
 //==============================================================================
@@ -223,6 +317,8 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
         /* Update the date labels and the minimum check-out date each time the
          * user updates the dates in the DatePickers. */
         updateDateViews()
+        updateNumberOfNightsCharges()
+        computeTotal()
     }
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
@@ -233,6 +329,8 @@ class AddRegistrationTableViewController: UITableViewController, SelectRoomTypeT
     
     @IBAction func wifiSwitchChanged(_ sender: UISwitch) {
         /* TODO: Implement the logic for this later in the challenge section. */
+        updateWifiCharges()
+        computeTotal()
     }
     
     @IBSegueAction func selectRoomType(_ coder: NSCoder) -> SelectRoomTypeTableViewController? {
