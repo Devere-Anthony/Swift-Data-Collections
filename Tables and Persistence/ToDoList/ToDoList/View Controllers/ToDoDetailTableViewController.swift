@@ -13,6 +13,7 @@ class ToDoDetailTableViewController: UITableViewController  {
     let datePickerLabelCellIndexPath = IndexPath(row: 0, section: 1)
     let datePickerCellIndexPath = IndexPath(row: 1, section: 1)
     let notesTextViewCellIndexPath = IndexPath(row: 0, section: 2)
+    var toDo: ToDo?    // optional will be empty until explicitly saved
 
 //==============================================================================
 // MARK: View Controller Methods
@@ -20,9 +21,25 @@ class ToDoDetailTableViewController: UITableViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let currentDueDate: Date
+        
+        // If a ToDo object is passed to the view controller, then set the following
+        // UI elements and properties to match the ToDo object.
+        if let toDo = toDo {
+            navigationItem.title = "To-Do"
+            titleTextField.text = toDo.title
+            isCompleteButton.isSelected = toDo.isComplete
+            currentDueDate = toDo.dueDate
+            notesTextView.text = toDo.notes
+        } else {
+            // No ToDo object was passed, thus we're in create mode which leaves
+            // everything else empty, but does set the default date to an hour ahead.
+            currentDueDate = Date().addingTimeInterval(3600)
+        }
+        
         // Initialize the UI elements.
-        dueDatePicker.date = Date().addingTimeInterval(3600)
-        updateDueDateLabel(date: dueDatePicker.date)
+        dueDatePicker.date = currentDueDate
+        updateDueDateLabel(date: currentDueDate)
         updateSaveButton()
     }
     
@@ -72,6 +89,28 @@ class ToDoDetailTableViewController: UITableViewController  {
     func updateDueDateLabel(date: Date) {
         /* Update the due date label. */
         dueDateLabel.text = date.formatted(.dateTime.month(.abbreviated).day().year().hour().minute())
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        /* Send user input data to the primary controller to create a new ToDo object only when the
+         * Save button is tapped. */
+        guard segue.identifier == "saveUnwind" else {return}
+        
+        let title = titleTextField.text!
+        let isComplete = isCompleteButton.isSelected
+        let dueDate = dueDatePicker.date
+        let notes = notesTextView.text
+        
+        // If editing a ToDo object, just make the updates.
+        if toDo != nil {
+            toDo?.title = title
+            toDo?.isComplete = isComplete
+            toDo?.dueDate = dueDate
+            toDo?.notes = notes
+        } else {
+            // If creating a new object, just create a new one instead.
+            toDo = ToDo(title: title, isComplete: isComplete, dueDate: dueDate, notes: notes)
+        }
     }
     
 //==============================================================================
